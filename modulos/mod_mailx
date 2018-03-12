@@ -1,0 +1,23 @@
+# modulo diretorio
+mailx(){
+
+#config
+#header
+checkVar
+
+# executar
+cat $LOG | tr -d '\r' > /tmp/log.txt;
+config_email="-S smtp=${SMTP} -S from=${FROM} -S smtp-auth=login -S smtp-auth-user=${LOGIN} -S smtp-auth-password=${SENHA} ${DESTINATARIOS}"
+if [ $ALERTERR -eq 0 ]; then
+######################################'######
+mail -s "$NOME BACKUP REALIZADO COM SUCESSO!" $config_email  < /tmp/log.txt
+  else
+mail -s "$NOME ..::ERRO::.. DURANTE O BACKUP" -S smtp="$SMTP" -S from="$FROM"  "$DESTINATARIOS"  < /tmp/log.txt
+############################################
+fi
+
+# algo deu errado
+falhou
+#footer
+unsetVar
+}

@@ -1,0 +1,10 @@
+var_vazia(){
+   echo -e "\n\t$lang_erro_missing"
+   echo -e "\t$cfgs\n"
+   echo -e "\t$lang_verifique"
+   echo -e "\t$VAR_ERR\n"
+   echo -e "\t$lang_exemplo $VAR_DICA\n"
+
+}
+
+

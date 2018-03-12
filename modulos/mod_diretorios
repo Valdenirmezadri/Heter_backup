@@ -1,0 +1,28 @@
+# modulo diretorio
+diretorios(){
+
+config
+header
+checkVar
+
+# executar
+if [ $R -eq 0 ]; then
+############################################
+backup(){
+
+ARQ="$DSTDIR/$BKP-$NOME-$DATA.tgz"
+tar -czf $ARQ $SRCDIR
+if [ $? -eq 0  ]; then
+  sucessoNoBackup
+  ls -goh $ARQ  |  awk        '{print $7" Total: "$3}'| \
+                   awk -F "/" '{print  $4}'
+fi
+}
+backup >> $LOG
+############################################
+fi
+
+falhou
+footer
+unsetVar
+}

@@ -1,0 +1,72 @@
+config(){
+BKP=$(echo $cfgs| cut -d. -f-2 | cut -d/ -f3)
+} >> $LOG
+
+function_exists() {
+    declare -f -F $1 > /dev/null
+    return $?
+}
+
+checkVar(){
+for i in $(echo $ALLVAR | sed "s/,/ /g")
+  do
+    if [[ ! ${!i} && ${!i-unset} ]] ; then
+    R=1
+    VAR_ERR="$i";
+    var_vazia;
+    fi
+  done
+dstdirCheck
+} >> $LOG
+
+unsetVar(){
+for i in $(echo $ALLVAR | sed "s/,/ /g")
+  do
+    unset $i
+  done
+unset DSTDIR
+} >> $LOG
+
+header(){
+HEADERV="${HEADER/BKPNAME/$BKP}"
+echo "${HEADERV/lan_iniciando/$lan_iniciando}"
+echo $(date +%c)
+echo ------------------------------------------------------------------
+echo
+} >> $LOG
+
+dstdirCheck(){
+if [ -z "$DSTDIR" ]; then
+   R=1
+   VAR_ERR="DSTDIR";
+   VAR_DICA="DSTDIR='/diversos/backup'";
+   var_vazia ;
+  fi
+
+if [ ! -d "$DSTDIR" ]; then
+echo "$lan_diretorio $DSTDIR $lan_nao_existe"
+R=1
+fi
+} >> $LOG
+
+
+sucessoNoBackup(){
+SUCESSO=$(cat $LOCAL_DIR/sistema/template/bkpsucesso)
+  SUCESSO="${SUCESSO/lan_backup_ok/$lan_backup_ok}"
+  echo "${SUCESSO/lan_mais_detalhes/$lan_mais_detalhes}"
+}
+
+falhou(){
+if [ $R -eq 1 ]; then
+echo "$lan_erro_durante $BKP"
+ALERTERR=1
+fi
+} >> $LOG
+
+footer(){
+echo
+echo ------------------------------------------------------------------
+echo $(date +%c)
+FOOTERV="${FOOTER/BKPNAME/$BKP}"
+echo "${FOOTERV/lan_finalizado/$lan_finalizado}"
+} >> $LOG

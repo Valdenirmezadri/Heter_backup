@@ -1,0 +1,37 @@
+# modulo diretorio
+mysql(){
+
+config
+header
+checkVar
+
+# executar
+if [ $R -eq 0 ]; then
+############################################
+backup(){
+
+ARQ="$DSTDIR/$BKP-$NOME-$DATA.sql"
+ARQTGZ="$DSTDIR/$BKP-$NOME-$DATA.tgz"
+mysqldump --host=$HOST --user=$USER --password=$PASS --databases $BANCO > $ARQ
+  if [ $? -eq 0 ] ; then
+    tar -czf $ARQTGZ $ARQ
+    if [ $? -eq 0  ]; then
+      sucessoNoBackup
+      rm -f $ARQ
+      ls -goh $ARQTGZ | awk        '{print $7" Total: "$3}'| \
+                        awk -F "/" '{print  $4}'
+    else
+      R=1
+    fi
+  else
+    R=1
+  fi
+}
+backup >> $LOG
+############################################
+fi
+
+falhou
+footer
+unsetVar
+}
