@@ -1,5 +1,5 @@
-# modulo diretorio
-mysql(){
+# modulo firebird
+firebird(){
 
 config
 header
@@ -11,9 +11,9 @@ if [ $R -eq 0 ]; then
 ############################################
 backup(){
 
-ARQ="$DSTDIR/$BKP-$NOME-$DATA.sql"
+ARQ="$DSTDIR/$BKP-$NOME-$DATA.fbk"
 ARQTGZ="$DSTDIR/$BKP-$NOME-$DATA.tgz"
-mysqldump --host=$HOST --user=$USER --password=$PASS --databases $BANCO > $ARQ
+$FBDDIR/gbak -b $FBDQUE $ARQ -user $USER -pas $SENHA
   if [ $? -eq 0 ] ; then
     tar -czf $ARQTGZ $ARQ
     if [ $? -eq 0  ]; then
@@ -22,12 +22,10 @@ mysqldump --host=$HOST --user=$USER --password=$PASS --databases $BANCO > $ARQ
       ls -goh $ARQTGZ | awk        '{print $7" Total: "$3}'| \
                         awk -F "/" '{print  $NF}'
     else
-    	echo "Erro durante backup do Mysql" 
-	R=1
+      R=1
     fi
   else
-    	echo "Erro durante backup do Mysql"
-	R=1
+    R=1
   fi
 }
 backup >> $LOG
@@ -38,3 +36,4 @@ falhou
 footer
 unsetVar
 }
+

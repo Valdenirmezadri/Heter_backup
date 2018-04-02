@@ -1,0 +1,25 @@
+# modulo diretorio
+apagadir(){
+
+config
+header
+checkVar
+alteraDia
+apagarDia
+
+# executar
+if [ $R -eq 0 ]; then
+############################################
+apaga(){
+
+find $DSTDIR -name "*gz" -type f -mtime +$TIME_BKCP -exec rm -fv {} ";"
+
+}
+apaga >> $LOG
+############################################
+fi
+
+falhou
+footer
+unsetVar
+}

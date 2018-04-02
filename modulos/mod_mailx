@@ -7,12 +7,20 @@ checkVar
 
 # executar
 cat $LOG | tr -d '\r' > /tmp/log.txt;
-config_email="-S smtp=${SMTP} -S from=${FROM} -S smtp-auth=login -S smtp-auth-user=${LOGIN} -S smtp-auth-password=${SENHA} ${DESTINATARIOS}"
+
+if [ $MAILTYPE -eq 1 ]; then
+config_email="${DESTINATARIOS}";
+fi
+
+if [ $MAILTYPE -eq 2 ]; then
+config_email="-S smtp=${SMTP} -S from=${FROM} -S smtp-auth=login -S smtp-auth-user=${LOGIN} -S smtp-auth-password=${SENHA} ${DESTINATARIOS}";
+fi
+
 if [ $ALERTERR -eq 0 ]; then
 ######################################'######
 mail -s "$NOME BACKUP REALIZADO COM SUCESSO!" $config_email  < /tmp/log.txt
   else
-mail -s "$NOME ..::ERRO::.. DURANTE O BACKUP" -S smtp="$SMTP" -S from="$FROM"  "$DESTINATARIOS"  < /tmp/log.txt
+mail -s "$NOME ..::ERRO::.. DURANTE O BACKUP" $config_email  < /tmp/log.txt
 ############################################
 fi
 
@@ -21,3 +29,4 @@ falhou
 #footer
 unsetVar
 }
+

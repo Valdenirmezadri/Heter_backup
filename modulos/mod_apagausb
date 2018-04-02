@@ -1,0 +1,36 @@
+# modulo diretorio
+apagausb(){
+
+config
+header
+
+
+# executar
+if [ $R -eq 0 ]; then
+############################################
+apaga(){
+
+USB=$(ls -l /dev/disk/by-uuid | egrep "$ID_DISK" | awk -F/ '{print "/dev/"$NF}')
+mount $USB $MNTDIR
+
+checkVar
+  for pasta in $MNTDIR/*/*;
+    do
+     if [ -d "$pasta" ]; then
+        DSTDIR=$pasta
+        apagarDia
+        find $DSTDIR -name "*gz" -type f -mtime +$TIME_BKCP -exec rm -fv {} ";"
+
+      fi
+  done
+
+umount $USB
+}
+apaga >> $LOG
+############################################
+fi
+
+falhou
+footer
+unsetVar
+}

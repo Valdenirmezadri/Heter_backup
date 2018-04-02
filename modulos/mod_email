@@ -1,0 +1,53 @@
+# modulo diretorio
+bkpemail(){
+
+config
+header
+checkVar
+alteraDia
+
+# executar
+if [ $R -eq 0 ]; then
+############################################
+backup(){
+
+if [[ -z $EXCECAO ]] ; then
+
+  for contas in $EMAILDIR/*; do
+    conta=$(echo $contas|awk -F "/" '{print $NF}' )
+    ARQ="$DSTDIR/$BKP-$conta-$NOME-$DATA.tgz"
+    tar -zcf "$ARQ" "$contas"
+    unset conta
+    unset ARQ
+  done
+
+else
+
+  EXCLUDE=$(echo $EXCECAO| sed 's/,/|/g')
+  
+  for contas in $EMAILDIR/*; do
+    if [[ ! $contas =~ ^.*($EXCLUDE)$ ]]; then
+      conta=$(echo $contas|awk -F "/" '{print $NF}' )
+      ARQ="$DSTDIR/$BKP-$conta-$NOME-$DATA.tgz"
+      tar -zcf "$ARQ" "$contas"
+      ls -goh $ARQ  |  awk        '{print $7" Total: "$3}'| \
+                   awk -F "/" '{print  $NF}'
+      unset conta
+      unset ARQ
+    fi
+  done
+
+fi
+
+if [ $? -eq 0  ]; then
+  sucessoNoBackup
+fi
+}
+backup >> $LOG
+############################################
+fi
+
+falhou
+footer
+unsetVar
+}

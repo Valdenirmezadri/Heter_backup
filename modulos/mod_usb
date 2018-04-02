@@ -1,0 +1,47 @@
+# modulo rsync para usb
+usb(){
+
+config
+header
+checkVar
+
+# executar
+if [ $R -eq 0 ]; then
+
+############################################
+backup(){
+USB=$(ls -l /dev/disk/by-uuid | grep "$ID_DISK" | awk -F/ '{print "/dev/"$NF}')
+mount $USB $DSTDIR
+  for pasta in $SRCDIR/*;
+    do
+      if [ -d $pasta ]; then 
+	destino=$(echo $pasta | awk -F "/" '{print  $NF}')
+
+	mkdir $DSTDIR/backup/$destino
+	mkdir $DSTDIR/backup/$destino/$lan_semanan
+	mkdir $DSTDIR/backup/$destino/$lan_mensal
+
+	rsync -Cravzp $(find $pasta -maxdepth 1 -type f  -mtime -1) \
+	$DSTDIR/backup/$destino
+  
+	rsync -Cravzp $(find $pasta/$lan_semanan -maxdepth 1 -type f  -mtime -1) \
+	$DSTDIR/backup/$destino/$lan_semanan
+
+	rsync -Cravzp $(find $pasta/$lan_mensal -maxdepth 1 -type f  -mtime -1) \
+	$DSTDIR/backup/$destino/$lan_mensal
+      
+      fi
+  done
+
+umount $USB
+}
+backup >> $LOG
+
+############################################
+fi
+
+
+falhou
+footer
+unsetVar
+}

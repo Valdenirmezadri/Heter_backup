@@ -33,15 +33,15 @@ DIA_MESC=$(date +%d)
 
    if [ $DIA_MESC =  $DIA_MES ]; then
     echo $BKP_MES > $DSTDIR/.dias_de_backup_em_nuvem
-    rsync -Cravzp --progress `find $DSTDIR -maxdepth 1 -type f -mtime -1 ` --port=$PORTA $LINKBKP::$RSYNC/$lan_mensal/
+    rsync -Cravzp `find $DSTDIR -maxdepth 1 -type f -mtime -1 ` --port=$PORTA $LINKBKP::$RSYNC/$lan_mensal/
 
    elif [ $DIA_SEMANAC =  $DIA_SEMANA ]; then
     echo $BKP_SEMANA > $DSTDIR/.dias_de_backup_em_nuvem
-    rsync -Cravzp --progress `find $DSTDIR -maxdepth 1 -type f -mtime -1 ` --port=$PORTA $LINKBKP::$RSYNC/$lan_semanan/
+    rsync -Cravzp `find $DSTDIR -maxdepth 1 -type f -mtime -1 ` --port=$PORTA $LINKBKP::$RSYNC/$lan_semanan/
 
    else
     echo $BKP_DIARIO > $DSTDIR/.dias_de_backup_em_nuvem
-    rsync -Cravzp --progress `find $DSTDIR -maxdepth 1 -type f -mtime -1 ` --port=$PORTA $LINKBKP::$RSYNC
+    rsync -Cravzp `find $DSTDIR -maxdepth 1 -type f -mtime -1 ` --port=$PORTA $LINKBKP::$RSYNC
    fi
 
   if [ $? -eq 0 ] ; then

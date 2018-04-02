@@ -25,7 +25,42 @@ for i in $(echo $ALLVAR | sed "s/,/ /g")
     unset $i
   done
 unset DSTDIR
+unset R
 } >> $LOG
+
+alteraDia(){
+DIA_SEMANAC=$(date +%A)
+DIA_MESC=$(date +%d)
+
+if [ $DIA_MESC =  $DIA_MES ]; then
+        DSTDIR=$DSTDIR/$lan_mensal
+	mkdir -p "$DSTDIR"
+elif [ $DIA_SEMANAC =  $DIA_SEMANA ]; then
+        DSTDIR=$DSTDIR/$lan_semanan
+	mkdir -p "$DSTDIR"
+else
+        DSTDIR=$DSTDIR
+fi
+}
+
+apagarDia(){
+DIA_SEMANAC=$(date +%A)
+DIA_MESC=$(date +%d)
+
+if [ $DIA_MESC =  $DIA_MES ]; then
+        DSTDIR=$DSTDIR/$lan_mensal
+        mkdir -p "$DSTDIR"
+	TIME_BKCP=$(($BKP_MES*31))
+elif [ $DIA_SEMANAC =  $DIA_SEMANA ]; then
+        DSTDIR=$DSTDIR/$lan_semanan
+	mkdir -p "$DSTDIR"
+        TIME_BKCP=$(($BKP_SEMANA*8))
+else
+        DSTDIR=$DSTDIR
+        TIME_BKCP=$BKP_DIARIO
+fi
+
+}
 
 header(){
 HEADERV="${HEADER/BKPNAME/$BKP}"

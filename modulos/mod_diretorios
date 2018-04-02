@@ -4,18 +4,18 @@ diretorios(){
 config
 header
 checkVar
+alteraDia
 
 # executar
 if [ $R -eq 0 ]; then
 ############################################
 backup(){
-
 ARQ="$DSTDIR/$BKP-$NOME-$DATA.tgz"
-tar -czf $ARQ $SRCDIR
+tar --exclude='/var/lib/mysql/mailscanner/maillog.*' --exclude='/var/lib/mysql/mysql.sock'  -czf $ARQ $SRCDIR
 if [ $? -eq 0  ]; then
   sucessoNoBackup
   ls -goh $ARQ  |  awk        '{print $7" Total: "$3}'| \
-                   awk -F "/" '{print  $4}'
+                   awk -F "/" '{print  $NF}'
 fi
 }
 backup >> $LOG
